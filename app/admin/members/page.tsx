@@ -5,7 +5,7 @@ import { useStore } from "@/lib/store";
 import { PageTitle } from "@/components/layout/AdminShell";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { Chip } from "@/components/ui/Chip";
+import { Chip, FilterChip } from "@/components/ui/Chip";
 import { Icon } from "@/components/ui/Icon";
 import { Avatar } from "@/components/ui/Avatar";
 import { Sheet } from "@/components/ui/Sheet";
@@ -34,6 +34,7 @@ export default function AdminMembersPage() {
   const toast = useToast();
 
   const [query, setQuery] = useState("");
+  const [stage, setStage] = useState(0); // 0 = 전체
   const [addOpen, setAddOpen] = useState(false);
   const [name, setName] = useState("");
   const [churchId, setChurchId] = useState(currentUser?.churchId ?? "");
@@ -43,10 +44,13 @@ export default function AdminMembersPage() {
   const churchIds = visibleChurchIds(currentUser);
   const churches = orgs.filter((o) => o.level === "church" && churchIds.includes(o.id));
 
-  const list = membersInScope(currentUser).filter((m) => {
-    if (!query.trim()) return true;
-    return getUser(m.userId)?.name.includes(query.trim());
-  });
+  const all = membersInScope(currentUser);
+  const list = all
+    .filter((m) => (stage === 0 ? true : m.eduStage === stage))
+    .filter((m) => {
+      if (!query.trim()) return true;
+      return getUser(m.userId)?.name.includes(query.trim());
+    });
 
   const submit = () => {
     if (!name.trim()) return;
@@ -61,7 +65,7 @@ export default function AdminMembersPage() {
     <div>
       <PageTitle
         title="교인 관리"
-        description={`권한 범위 내 교인 ${list.length}명`}
+        description={`권한 범위 내 교인 ${all.length}명`}
         action={
           <Button onClick={() => setAddOpen(true)}>
             <Icon name="user-plus" size={17} />
@@ -70,19 +74,31 @@ export default function AdminMembersPage() {
         }
       />
 
-      {/* 검색 */}
-      <div className="anim-rise relative mb-4 max-w-sm">
-        <Icon
-          name="search"
-          size={17}
-          className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-faint"
-        />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="이름으로 검색"
-          className="h-11 w-full rounded-(--radius-control) border border-line bg-surface pl-10 pr-4 text-sm placeholder:text-faint transition-all duration-200 focus:border-royal focus:ring-[3px] focus:ring-royal-ring/60"
-        />
+      {/* 검색 + 단계 필터 */}
+      <div className="anim-rise mb-4 flex items-center gap-3">
+        <div className="relative max-w-sm flex-1">
+          <Icon
+            name="search"
+            size={17}
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-faint"
+          />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="이름으로 검색"
+            className="h-11 w-full rounded-(--radius-control) border border-line bg-surface pl-10 pr-4 text-sm placeholder:text-faint transition-all duration-200 focus:border-royal focus:ring-[3px] focus:ring-royal-ring/60"
+          />
+        </div>
+        <div className="flex gap-1.5">
+          <FilterChip active={stage === 0} onClick={() => setStage(0)}>
+            전체 {all.length}
+          </FilterChip>
+          {([1, 2, 3, 4, 5] as EduStage[]).map((s) => (
+            <FilterChip key={s} active={stage === s} onClick={() => setStage(s)}>
+              {s}. {EDU_STAGES[s]}
+            </FilterChip>
+          ))}
+        </div>
       </div>
 
       <Card className="anim-rise overflow-hidden" style={{ animationDelay: "0.06s" }}>

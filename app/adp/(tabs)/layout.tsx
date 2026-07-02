@@ -19,7 +19,7 @@ export default function AdpTabsLayout({ children }: { children: React.ReactNode 
   const tabs: TabDef[] =
     viewMode === "pastor"
       ? [
-          { key: "church", label: "우리교회", icon: "church" },
+          { key: "church", label: "교회", icon: "church" },
           { key: "members", label: "교인", icon: "users" },
           { key: "questions", label: "질문", icon: "message-circle", badge: pendingCount },
         ]
