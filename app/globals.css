@@ -1,0 +1,234 @@
+@import "tailwindcss";
+
+/* ============================================================
+   ADP 디자인 토큰 — 모던 프리미엄
+   기준색: 재림교회 로고 딥블루 #1B4F8A
+   결: 절제된 쿨 뉴트럴 + 넉넉한 여백 + 은은한 깊이감
+   ============================================================ */
+@theme {
+  /* ----- 뉴트럴 ----- */
+  --color-canvas: #f5f6f8; /* 앱 배경 */
+  --color-surface: #ffffff; /* 카드/시트 */
+  --color-sunken: #eef0f4; /* 파인 영역(인풋 배경 등) */
+  --color-ink: #0e1b2c; /* 본문 잉크 — 네이비 블랙 */
+  --color-mist: #5b6b7f; /* 보조 텍스트 */
+  --color-faint: #93a0b0; /* 3차 텍스트/플레이스홀더 */
+  --color-line: #e6e9ee; /* 기본 보더 */
+  --color-line-strong: #d3d9e2; /* 진한 보더(컨트롤) */
+
+  /* ----- 브랜드 (로고 딥블루) ----- */
+  --color-royal: #1b4f8a;
+  --color-royal-deep: #163f6e; /* hover/pressed */
+  --color-royal-bright: #2f6cb3; /* 그라데이션 상단/포인트 */
+  --color-royal-soft: #ebf2fa; /* tonal 배경 */
+  --color-royal-ring: #b9d2ec; /* 포커스 링 */
+
+  /* ----- 시맨틱 ----- */
+  --color-amber: #c07a24; /* 현재 단계·진행·강조 */
+  --color-amber-soft: #faf0df;
+  --color-sage: #178f63; /* 완료·긍정 */
+  --color-sage-soft: #e2f4ec;
+  --color-coral: #d24848; /* 위험·삭제 */
+  --color-coral-soft: #fcebeb;
+
+  /* ----- 그림자 (레이어드, 은은하게) ----- */
+  --shadow-card: 0 1px 2px rgb(14 27 44 / 0.05), 0 2px 8px rgb(14 27 44 / 0.04);
+  --shadow-raised: 0 2px 4px rgb(14 27 44 / 0.05), 0 8px 24px rgb(14 27 44 / 0.09);
+  --shadow-overlay: 0 8px 16px rgb(14 27 44 / 0.1), 0 24px 60px rgb(14 27 44 / 0.22);
+  --shadow-tab: 0 -1px 0 rgb(14 27 44 / 0.05), 0 -8px 24px rgb(14 27 44 / 0.06);
+
+  /* ----- 타이포 ----- */
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system,
+    BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", sans-serif;
+
+  --text-display: 1.75rem; /* 28 — 모바일 히어로 숫자/타이틀 */
+  --text-title: 1.375rem; /* 22 — 화면 제목 */
+  --text-lg: 1.125rem; /* 18 — 섹션/카드 제목 */
+  --text-base: 0.9375rem; /* 15 — 본문(모바일 앱 기준) */
+  --text-sm: 0.8125rem; /* 13 — 보조 */
+  --text-xs: 0.6875rem; /* 11 — 라벨/캡션 */
+
+  /* ----- 라운드 ----- */
+  --radius-card: 18px;
+  --radius-control: 12px;
+  --radius-sheet: 24px;
+
+  /* ----- 모바일 프레임 ----- */
+  --width-device: 420px;
+}
+
+/* ============================================================
+   전역
+   ============================================================ */
+html {
+  height: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.55;
+  letter-spacing: -0.011em; /* 한글 프리미엄 톤 — 살짝 타이트 */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* 숫자는 어디서든 고정폭 — 통계·진도율 정렬 */
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 헤드라인 — 또렷하고 타이트하게 */
+.headline {
+  letter-spacing: -0.022em;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+/* 인터랙티브 요소 공통 */
+button,
+[role="button"],
+a {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+/* 포커스 링 — 키보드 내비게이션 가시성 */
+:focus-visible {
+  outline: 2px solid var(--color-royal);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+}
+
+/* 스크롤바 — 관리자 PC 화면용 미니멀 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line-strong);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-faint);
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ============================================================
+   애니메이션
+   ============================================================ */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    opacity: 0;
+    transform: translateY(48px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  70% {
+    transform: scale(1.03);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(192 122 36 / 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgb(192 122 36 / 0);
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.anim-rise {
+  animation: rise-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-fade {
+  animation: fade-in 0.3s ease both;
+}
+.anim-sheet {
+  animation: sheet-up 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-pop {
+  animation: pop-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 순차 등장 (리스트 아이템) */
+.stagger > * {
+  animation: rise-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.02s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger > *:nth-child(4) { animation-delay: 0.14s; }
+.stagger > *:nth-child(5) { animation-delay: 0.18s; }
+.stagger > *:nth-child(6) { animation-delay: 0.22s; }
+.stagger > *:nth-child(7) { animation-delay: 0.26s; }
+.stagger > *:nth-child(8) { animation-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
